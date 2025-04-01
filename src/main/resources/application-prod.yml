@@ -1,5 +1,5 @@
 datasource:
-  url: ${DBMS_CONNECTION:jdbc:mysql://mysql.railway.internal:5923/railway}
+  url: ${DBMS_CONNECTION:jdbc:mysql://crossover.proxy.rlwy.net:26696/railway}
   driver-class-name: com.mysql.cj.jdbc.Driver
   username: ${DBMS_USERNAME:root}
-  password: ${DBMS_PASSWORD:vqaApL1MIVVpmDAnnSZ0IsSnizXyIhRB}
+  password: ${DBMS_PASSWORD:CzflGHKGRVTMEZIhcOmHPogEiZgBvgKo}
