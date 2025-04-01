@@ -19,10 +19,10 @@ spring:
       WRITE_DATES_AS_TIMESTAMPS: false
 
   datasource:
-    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/student}
+    url: ${DBMS_CONNECTION}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ${DBMS_USERNAME:root}
-    password: ${DBMS_PASSWORD:04122003}
+    username: ${DBMS_USERNAME}
+    password: ${DBMS_PASSWORD}
     type: com.zaxxer.hikari.HikariDataSource
 
   jpa:
