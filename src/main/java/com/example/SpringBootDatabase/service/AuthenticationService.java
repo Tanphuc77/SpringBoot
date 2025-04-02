@@ -84,6 +84,7 @@ public class AuthenticationService {
 
         var token = generateToken(user);
 
+        System.out.println("Login successful for user: " + request.getUsername());
         return AuthenticationResponse.builder()
                 .token(token)
                 .authenticated(true)
