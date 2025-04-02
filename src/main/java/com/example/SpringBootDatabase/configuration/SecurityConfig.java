@@ -35,6 +35,7 @@ public class SecurityConfig {
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
 
+    // Cấu hình bảo mật ứng dụng
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request ->
@@ -43,9 +44,9 @@ public class SecurityConfig {
 
         httpSecurity.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer ->
-                                jwtConfigurer.decoder(customJwtDecoder)
-                                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                                jwtConfigurer.decoder(customJwtDecoder) // Dùng CustomJwtDecoder để giải mã JWT
+                                        .jwtAuthenticationConverter(jwtAuthenticationConverter())) // Chuyển đổi JWT thành Authentication
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // Xử lý lỗi xác thực
         );
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);

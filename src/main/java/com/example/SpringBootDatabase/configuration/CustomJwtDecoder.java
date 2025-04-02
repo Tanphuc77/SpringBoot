@@ -26,6 +26,7 @@ public class CustomJwtDecoder implements JwtDecoder {
 
     private NimbusJwtDecoder nimbusJwtDecoder = null;
 
+    // Kiểm tra tính hợp lệ của JWT bằng cách gửi yêu cầu introspect đến dịch vụ xác thực
     @Override
     public Jwt decode(String token) throws JwtException {
 

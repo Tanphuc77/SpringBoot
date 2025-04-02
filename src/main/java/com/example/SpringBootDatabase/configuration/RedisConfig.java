@@ -13,6 +13,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 @Configuration
 public class RedisConfig {
 
+    // Cấu hình RedisConnectionFactory để kết nối với Redis.
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration("127.0.0.1", 6378);
@@ -22,10 +23,14 @@ public class RedisConfig {
         return new LettuceConnectionFactory(configuration);
     }
 
+    // Cấu hình RedisTemplate để thao tác với Redis.
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
+
+        // thiết lập kết nối Redis cho template
         template.setConnectionFactory(redisConnectionFactory());
+
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         return template;
