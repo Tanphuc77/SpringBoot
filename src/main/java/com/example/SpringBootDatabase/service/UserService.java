@@ -112,6 +112,9 @@ public class UserService {
         userMapper.updateUser(user, userRequest);
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
+        if (userRequest.getRoles() == null || userRequest.getRoles().isEmpty()) {
+            throw new AppException(Errorcode.USER_ROLE_REQUIRED);
+        }
         var roles = roleRepository.findAllById(userRequest.getRoles());
         user.setRoles(new HashSet<>(roles));
 

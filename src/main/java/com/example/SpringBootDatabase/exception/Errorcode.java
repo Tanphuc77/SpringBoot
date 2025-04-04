@@ -25,8 +25,8 @@ public enum Errorcode {
     FORBIDDEN(1010, "You do not have permission", HttpStatus.FORBIDDEN),
     USER_NOT_EXISTED(1011, "User not existed", HttpStatus.NOT_FOUND),
     ROLE_NOT_FOUND(1012, "Role not found", HttpStatus.NOT_FOUND),
-    USER_ALREADY_REGISTER_COURSE(1013,"User already registered for this course",HttpStatus.BAD_REQUEST)
-    ;
+    USER_ALREADY_REGISTER_COURSE(1013,"User already registered for this course",HttpStatus.BAD_REQUEST),
+    USER_ROLE_REQUIRED(1014,"User Role Required",HttpStatus.BAD_REQUEST );
 
     private final int code;
     private final String message;
