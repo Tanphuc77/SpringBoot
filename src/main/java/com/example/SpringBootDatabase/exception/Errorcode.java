@@ -14,19 +14,19 @@ public enum Errorcode {
     INVALID_EMAIL(1005, "Invalid email", HttpStatus.BAD_REQUEST),
     NAME_INVALID(1006, "Name must be at least 3 characters", HttpStatus.BAD_REQUEST),
     USER_EMAIL_ALREADY_EXISTS(1007, "User email already exists", HttpStatus.BAD_REQUEST),
-    USER_NOT_FOUND(1001, "User not found", HttpStatus.NOT_FOUND),
-    COURSE_NOT_FOUND(1002, "Course not found", HttpStatus.NOT_FOUND),
-    STUDENT_NOT_FOUND_EMAIL_OR_NAME(1003, "No students found with email or name", HttpStatus.NOT_FOUND),
-    ENROLLMENT_NOT_FOUND(1004, "Enrollment not found", HttpStatus.NOT_FOUND),
-    USER_ALREADY_ENROLLED(1005, "User is already enrolled in a course", HttpStatus.BAD_REQUEST),
-    INVALID_DATE_OF_BIRTH(1007, "Invalid date of birth", HttpStatus.BAD_REQUEST),
     AUTHENTICATION_FAILED(1008, "Authentication failed", HttpStatus.UNAUTHORIZED),
     UNAUTHENTICATED(1009, "Uauthenticated", HttpStatus.UNAUTHORIZED),
     FORBIDDEN(1010, "You do not have permission", HttpStatus.FORBIDDEN),
     USER_NOT_EXISTED(1011, "User not existed", HttpStatus.NOT_FOUND),
     ROLE_NOT_FOUND(1012, "Role not found", HttpStatus.NOT_FOUND),
     USER_ALREADY_REGISTER_COURSE(1013,"User already registered for this course",HttpStatus.BAD_REQUEST),
-    USER_ROLE_REQUIRED(1014,"User Role Required",HttpStatus.BAD_REQUEST );
+    USER_ROLE_REQUIRED(1014,"User Role Required",HttpStatus.BAD_REQUEST ),
+    USER_NOT_FOUND(1015, "User not found", HttpStatus.NOT_FOUND),
+    COURSE_NOT_FOUND(1016, "Course not found", HttpStatus.NOT_FOUND),
+    STUDENT_NOT_FOUND_EMAIL_OR_NAME(1017, "No students found with email or name", HttpStatus.NOT_FOUND),
+    ENROLLMENT_NOT_FOUND(1018, "Enrollment not found", HttpStatus.NOT_FOUND),
+    USER_ALREADY_ENROLLED(1019, "User is already enrolled in a course", HttpStatus.BAD_REQUEST),
+    INVALID_DATE_OF_BIRTH(1020, "Invalid date of birth", HttpStatus.BAD_REQUEST);
 
     private final int code;
     private final String message;
