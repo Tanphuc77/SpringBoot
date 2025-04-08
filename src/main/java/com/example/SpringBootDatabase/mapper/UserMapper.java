@@ -2,6 +2,7 @@ package com.example.SpringBootDatabase.mapper;
 
 import com.example.SpringBootDatabase.dto.request.UserRequest;
 import com.example.SpringBootDatabase.dto.request.UserUpdateRequest;
+import com.example.SpringBootDatabase.dto.response.UserDetailResponse;
 import com.example.SpringBootDatabase.dto.response.UserResponse;
 import com.example.SpringBootDatabase.entity.User;
 import org.mapstruct.Mapper;
@@ -13,6 +14,8 @@ public interface UserMapper {
     User toUser(UserRequest userRequest);
 
     UserResponse toUserResponse(User user);
+
+    UserDetailResponse toUserDetailResponse(User user);
 
     @Mapping(target = "roles", ignore = true)
     void updateUser(@MappingTarget User user, UserUpdateRequest userRequest);

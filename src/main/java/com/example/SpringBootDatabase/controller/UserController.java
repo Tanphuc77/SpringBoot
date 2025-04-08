@@ -3,6 +3,8 @@ package com.example.SpringBootDatabase.controller;
 import com.example.SpringBootDatabase.dto.request.UserRequest;
 import com.example.SpringBootDatabase.dto.request.UserUpdateRequest;
 import com.example.SpringBootDatabase.dto.response.ApiResponse;
+import com.example.SpringBootDatabase.dto.response.PageResponse;
+import com.example.SpringBootDatabase.dto.response.UserDetailResponse;
 import com.example.SpringBootDatabase.dto.response.UserResponse;
 import com.example.SpringBootDatabase.entity.User;
 import com.example.SpringBootDatabase.service.UserService;
@@ -23,19 +25,20 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    ApiResponse<List<UserResponse>> getAllUsers() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("Username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-
-        ApiResponse<List<UserResponse>> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.getAllUsers());
-        return apiResponse;
+    ApiResponse<PageResponse<UserResponse>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        PageResponse<UserResponse> pageResponse = userService.getAllUsers(page, size);
+        return ApiResponse.<PageResponse<UserResponse>>builder()
+                .code(200)
+                .message("Success")
+                .result(pageResponse)
+                .build();
     }
 
     @GetMapping("/{userId}")
-    ApiResponse<UserResponse> getStudentById(@PathVariable String userId) {
-        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+    ApiResponse<UserDetailResponse> getStudentById(@PathVariable String userId) {
+        ApiResponse<UserDetailResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(userService.getUserById(userId));
         return apiResponse;
     }

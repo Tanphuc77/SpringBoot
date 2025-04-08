@@ -3,6 +3,9 @@ package com.example.SpringBootDatabase.service;
 import com.example.SpringBootDatabase.constant.PredefinedRole;
 import com.example.SpringBootDatabase.dto.request.UserRequest;
 import com.example.SpringBootDatabase.dto.request.UserUpdateRequest;
+import com.example.SpringBootDatabase.dto.response.ApiResponse;
+import com.example.SpringBootDatabase.dto.response.PageResponse;
+import com.example.SpringBootDatabase.dto.response.UserDetailResponse;
 import com.example.SpringBootDatabase.dto.response.UserResponse;
 import com.example.SpringBootDatabase.entity.User;
 import com.example.SpringBootDatabase.entity.Role;
@@ -15,6 +18,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -26,6 +32,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,29 +46,48 @@ public class UserService {
     RedisTemplate<String, Object> redisTemplate;
 
     @PreAuthorize("hasAuthority('Read_Data')")
-    public List<UserResponse> getAllUsers() {
-        return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
+    public PageResponse<UserResponse> getAllUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> userPage = userRepository.findAll(pageable);
+
+        List<UserResponse> users = userPage.getContent().stream()
+                .map(userMapper::toUserResponse)
+                .collect(Collectors.toList());
+
+        return PageResponse.<UserResponse>builder()
+                .content(users)
+                .currentPage(userPage.getNumber())
+                .totalPages(userPage.getTotalPages())
+                .totalElements(userPage.getTotalElements())
+                .build();
     }
 
     @PostAuthorize("hasAuthority('Read_Data') or returnObject.username == authentication.name")
-    public UserResponse getUserById(String userId) {
+    public UserDetailResponse getUserById(String userId) {
         String cacheKey = "user:" + userId;
         ValueOperations<String, Object> valueOps = redisTemplate.opsForValue();
 
         if (redisTemplate.hasKey(cacheKey)) {
             log.info("Fetching user from Redis cache: {}", userId);
-            return (UserResponse) valueOps.get(cacheKey);
+            return (UserDetailResponse) valueOps.get(cacheKey);
         }
 
         // Nếu không có, lấy từ DB và lưu vào Redis
         log.info("Fetching user from database: {}", userId);
-        UserResponse userResponse = userMapper.toUserResponse(
-                userRepository.findById(userId)
-                        .orElseThrow(() -> new AppException(Errorcode.USER_NOT_FOUND))
-        );
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(Errorcode.USER_NOT_FOUND));
 
-        valueOps.set(cacheKey, userResponse, 10, TimeUnit.MINUTES);
-        return userResponse;
+        UserDetailResponse userDetailResponse = userMapper.toUserDetailResponse(user);
+
+        // 💡 Thêm flag isProjectManager dựa trên quyền
+        boolean isProjectManager = user.getRoles().stream()
+                .flatMap(role -> role.getPermissions().stream())
+                .anyMatch(p -> p.getName().equalsIgnoreCase("PROJECT_MANAGER"));
+
+        userDetailResponse.setProjectManager(isProjectManager);
+
+        valueOps.set(cacheKey, userDetailResponse, 10, TimeUnit.MINUTES);
+        return userDetailResponse;
     }
 
     public UserResponse getMyInfo() {

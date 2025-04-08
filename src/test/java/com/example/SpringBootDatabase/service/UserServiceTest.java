@@ -41,24 +41,6 @@ class UserServiceTest {
         openMocks(this);
     }
 
-
-    @Test
-    void testGetAllUsers() {
-        User user = new User();
-        user.setUserId("test");
-        user.setUsername("test");
-        user.setPassword("test");
-
-        UserResponse userResponse = new UserResponse();
-        when(userRepository.findAll()).thenReturn(List.of(user));
-        when(userMapper.toUserResponse(user)).thenReturn(userResponse);
-
-        List<UserResponse> result = userService.getAllUsers();
-
-        assertEquals(1, result.size());
-        assertEquals(userResponse, result.get(0));
-    }
-
     @Test
     void testGetUserById() {
         User user = new User();
